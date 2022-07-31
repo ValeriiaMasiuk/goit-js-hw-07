@@ -30,21 +30,29 @@ function createGallery(galleryItems) {
 }
 
 galleryBox.addEventListener('click', onImageActive)
+let modal;
 
 function onImageActive(evt) {
     evt.preventDefault()
-    console.log(evt.target)
+    // console.log(evt.target)
 
-    const modal = new basicLightbox
-        .create(`<img src="${evt.target.dataset.source}" alt="${evt.target.alt}">`);
-    
+    modal = basicLightbox.create(`<img src="${evt.target.dataset.source}">`,
+        {
+            onShow: (modal) => {
+                window.addEventListener('keydown', modalClose);
+            },
+            onClose: (modal) => {
+                window.removeEventListener('keydown', modalClose);
+            },
+        });
     modal.show();
+}
 
-    window.addEventListener('keydown', evt => {
-        if (evt.code === 'Escape' && modal.visible()) {
+function modalClose(evt) {
+    if (evt.code === 'Escape' && modal.visible()) {
             modal.close();
         }
-    })
 }
+
 
 
